@@ -62,19 +62,21 @@ class PostAdmin(BaseOwnerAdmin):
 
     operator.short_description = "操作"
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(PostAdmin , self).save_model(request, obj, form, change)
+    def formfield_for_manytomany(self, db_field, request=None, **kwargs):
+        if db_field.name == "tag":
+            kwargs["queryset"] = Tag.objects.filter(owner_id=request.user.id)
+        return super(PostAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    def get_queryset(self, request):
-        qs = super(PostAdmin, self).get_queryset(request)
-        return qs.filter(owner = request.user)
+    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
+        if db_field.name == "category":
+            kwargs["queryset"] = Category.objects.filter(owner_id=request.user.id)
+        return super(PostAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-    class Media:
-        css = {
-            'all': ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css',)
-        }
-        js = ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.js',)
+   # class Media:
+      #  css = {
+          #  'all': ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css',)
+     #   }
+      #  js = ('https://cdn.bootcss.com/bootstrap/4.0.0-beta.2/js/bootstrap.bundle.js',)
 
 
 @admin.register(Category,  site=custom_site)
@@ -88,15 +90,8 @@ class CategoryAdmin(BaseOwnerAdmin):
 
     post_count.short_description = "文章数量"
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(CategoryAdmin, self).save_model(request, obj, form, change)
 
 @admin.register(Tag,  site=custom_site)
 class TagAdmin(BaseOwnerAdmin):
     list_display = ('name', 'status', 'created_time')
     fields = ('name', 'status')
-
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        return super(TagAdmin, self).save_model(request, obj, form, classmethod)
