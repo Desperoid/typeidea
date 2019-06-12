@@ -23,7 +23,6 @@ class Category(models.Model):
                 nav_categories.append(category)
             else :
                 normal_categories.append(category)
-        print(nav_categories)
         return {
             'navs':nav_categories,
             'categories':normal_categories,

@@ -1,5 +1,6 @@
-
 {% extends "./base.html" %}
+{%  load comment_block %}
+
 {% block title %}{{post.title}}{% endblock %}
 
 {% block main %}
@@ -14,4 +15,5 @@
     {% else %}
     <h2>没有数据</h2>
     {% endif %}
+{% comment_block request.path %}
 {% endblock %}
