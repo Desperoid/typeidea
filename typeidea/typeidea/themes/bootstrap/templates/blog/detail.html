@@ -2,6 +2,15 @@
 {%  load comment_block %}
 
 {% block title %}{{post.title}}{% endblock %}
+{% block extra_head %}
+<link rel="stylesheet"
+      href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/googlecode.min.css">
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js">
+</script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+{% endblock %}
 
 {% block main %}
     {% if post %}
@@ -11,7 +20,11 @@
         <span>作者: {{ post.owner.username }}</span>
     </div>
     <hr/>
-    <p> {{ post.content }} </p>
+    <p>
+        {%  autoescape off %}
+        {{ post.content_html }}
+        {% endautoescape %}
+    </p>
     {% else %}
     <h2>没有数据</h2>
     {% endif %}
