@@ -40,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'xadmin',
+    'crispy_forms',
+    'dal',
+    'dal_select2'
 ]
 
 MIDDLEWARE = [
@@ -120,3 +124,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'theme', THEME, 'static') ,
 ]
+
+XADMIN_TITLE = 'Typeidea管理后台系统'
+XADMIN_FOOTER_TITLE= 'power by the5fire.com'
