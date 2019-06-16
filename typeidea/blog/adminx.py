@@ -9,6 +9,7 @@ import xadmin
 
 from .models import Category, Tag, Post
 from typeidea.base_admin import BaseOwnerAdmin
+from .adminforms import PostAdminForm
 
 
 class PostInline:
@@ -35,7 +36,7 @@ manager.register(CategoryOwnerFilter, take_priority=True)
 
 @xadmin.sites.register(Post)
 class PostAdmin(BaseOwnerAdmin):
-    #form = PostAdminForm
+    form = PostAdminForm
     list_display = ('title', 'category', 'status', 'created_time', 'owner','operator')
     list_display_links = []
 
@@ -51,7 +52,7 @@ class PostAdmin(BaseOwnerAdmin):
     exclude = ('owner',)
     form_layout = (
         Fieldset('基础配置', Row('title','category'), 'status', 'tag'),
-        Fieldset('内容信息', 'desc','content'),
+        Fieldset('内容信息', 'desc','is_md', 'content_ck', 'content_md', 'content'),
     )
     filter_horizontal = ('tag',)
     #fields = ( ('category', 'title'), 'desc', 'status', 'content', 'tag')
@@ -60,16 +61,6 @@ class PostAdmin(BaseOwnerAdmin):
         return format_html('<a href="{}">编辑</a>', reverse('xadmin:blog_post_change', args=(obj.id,)))
 
     operator.short_description = "操作"
-
-    def formfield_for_manytomany(self, db_field, request=None, **kwargs):
-        if db_field.name == "tag":
-            kwargs["queryset"] = Tag.objects.filter(owner_id=request.user.id)
-        return super(PostAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def formfield_for_foreignkey(self, db_field, request=None, **kwargs):
-        if db_field.name == "category":
-            kwargs["queryset"] = Category.objects.filter(owner_id=request.user.id)
-        return super(PostAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
    # class Media:
       #  css = {

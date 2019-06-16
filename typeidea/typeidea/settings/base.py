@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'xadmin',
     'crispy_forms',
     'dal',
-    'dal_select2'
+    'dal_select2',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 MIDDLEWARE = [
@@ -119,11 +121,29 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+STATIC_ROOT = '/tmp/static'
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'theme', THEME, 'static') ,
+    os.path.join(BASE_DIR, 'themes', THEME, 'static') ,
 ]
 
 XADMIN_TITLE = 'Typeidea管理后台系统'
 XADMIN_FOOTER_TITLE= 'power by the5fire.com'
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar':'full',
+        'height': 300,
+        'width':800,
+        'tabSpaces': 4,
+        'extraPlugins': 'codesnippet', #配置代码插件
+}
+}
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+CKEDITOR_UPLOAD_PATH = 'articale_images'
+
+DEFAULT_FILE_STORAGE = 'typeidea.storage.WatermarkStorage'
