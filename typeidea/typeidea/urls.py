@@ -17,20 +17,27 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.sitemaps import views as sitemap_views
 from django.conf.urls.static import static
+from django.conf import settings
 
 import xadmin
+from rest_framework.routers import DefaultRouter
+from rest_framework.documentation import include_docs_urls
+
 
 from blog.views import (IndexView, PostDetailView, CategoryView,
                         TagView, SearchView, AuthorView)
 from blog.rss import LatestPostFeed
 from blog.sitemap import PostSitemap
+from blog.apis import PostViewSet,CategoryViewSet
 from config.views import LinkView
 from typeidea.custom_site import  custom_site
 from comment.views import CommentView
 from typeidea.autocomplete import CategoryAutocomplete, TagAutocomplete
-from django.conf import settings
 
 
+router = DefaultRouter()
+router.register(r'post', PostViewSet, base_name='api-post')
+router.register(r'category', CategoryViewSet, base_name='api-category')
 urlpatterns = [
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^search/$', SearchView.as_view(), name='search'),
@@ -46,4 +53,6 @@ urlpatterns = [
     url(r'^tag-autocomplete/$', TagAutocomplete.as_view(), name='tag-autocomplete'),
     url(r'^admin/',  xadmin.site.urls, name='xadmin'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^api/',include(router.urls, namespace='api')),
+    url(r'^api/docs/', include_docs_urls(title='typeidea apis')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

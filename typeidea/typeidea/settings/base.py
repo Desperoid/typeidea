@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'dal_select2',
     'ckeditor',
     'ckeditor_uploader',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CKEDITOR_UPLOAD_PATH = 'articale_images'
 
 DEFAULT_FILE_STORAGE = 'typeidea.storage.WatermarkStorage'
+
+#rest_framework
+REST_FRAMEWORK= {
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE':2,
+}
