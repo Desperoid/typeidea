@@ -19,7 +19,6 @@ class CommonViewMixin:
             {'sidebars': SideBar.get_all()}
         )
         context.update(Category.get_navs())
-        print(context)
         return context
 
 class IndexView(CommonViewMixin, ListView):

@@ -1,2 +1,5 @@
 Django ~= 1.11
+mistune
+xadmin
+django-autocomplete-light==3.2.10
 -e .
