@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.functional import cached_property
+from django.core.cache import cache
 
 import mistune
 # Create your models here.
@@ -86,7 +87,11 @@ class Post(models.Model):
 
     @classmethod
     def hot_posts(cls):
-        return cls.objects.filter(status=cls.STATUS_NOMAL).order_by('-pv').only('title','id')
+        result = cache.get('hot_posts')
+        if not result:
+            result = cls.objects.filter(status=cls.STATUS_NOMAL).order_by('-pv').only('title','id')
+            cache.set('hot_posts', result, 10*60)
+        return result
 
     @staticmethod
     def get_by_tag(tag_id):
